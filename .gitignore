@@ -5,3 +5,6 @@ __pycache__
 venv
 *.secondary
 node_modules
+babel_cache
+tmp
+dist

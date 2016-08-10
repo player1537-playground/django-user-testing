@@ -20,8 +20,6 @@ export PYTHONPATH
 ################
 # Local Variables
 
-migrations := $(wildcard ./$(PREFIX)api/*/migrations/*.py)
-
 ################
 # Standard Targets
 
@@ -29,9 +27,13 @@ migrations := $(wildcard ./$(PREFIX)api/*/migrations/*.py)
 $(PREFIX)all: $(PREFIX)run
 
 .PHONY: $(PREFIX)run
-$(PREFIX)run: $(PREFIX).depend.secondary $(PREFIX).migrate.secondary
-	cd $(current_dir); \
-	source venv/bin/activate; \
+$(PREFIX)run: $(PREFIX).depend.secondary
+	cd $(current_dir) && \
+	source venv/bin/activate && \
+	if ./manage.py showmigrations --list | grep ' \[ \]' >/dev/null; then \
+		./manage.py makemigrations && \
+		./manage.py migrate; \
+	fi && \
 	./manage.py runserver $(API_PORT)
 
 .PHONY: $(PREFIX)depend
@@ -39,6 +41,12 @@ $(PREFIX)depend: $(PREFIX).depend.seconadry
 
 ################
 # My Targets
+
+.PHONY: $(PREFIX)testing
+$(PREFIX)testing:
+	cd $(current_dir) && \
+	source venv/bin/activate && \
+	echo $$?
 
 .SECONADRY: $(PREFIX).migrate.secondary
 $(PREFIX).migrate.secondary:

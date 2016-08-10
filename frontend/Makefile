@@ -23,7 +23,10 @@ $(PREFIX)all: $(PREFIX)run
 
 .PHONY: $(PREFIX)run
 $(PREFIX)run:
-	cd $(current_dir);
+	cd $(current_dir); \
+	./node_modules/.bin/webpack-dev-server \
+	--host $(FRONTEND_SERVER_NAME) \
+	--port $(FRONTEND_PORT)
 
 .PHONY: $(PREFIX)depend
 $(PREFIX)depend: $(PREFIX).depend.secondary
