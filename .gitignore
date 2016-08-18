@@ -8,3 +8,4 @@ node_modules
 babel_cache
 tmp
 dist
+nginx/nginx.conf

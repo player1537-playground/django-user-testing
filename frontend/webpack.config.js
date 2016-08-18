@@ -6,14 +6,14 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?//' + process.env.API_SERVER_NAME + ':' + process.env.API_PORT + '/webpack/sockjs-node',
+    'webpack-dev-server/client?//' + process.env.NGINX_SERVER_NAME + ':' + process.env.NGINX_PORT + '/frontend/sockjs-node',
     'webpack/hot/only-dev-server',
     'expose?main!./src/main.js'
   ],
 
   output: {
     path: 'dist/',
-    publicPath: '/webpack/dist/',
+    publicPath: '/frontend/dist/',
     filename: 'build.js'
   },
 

@@ -10,54 +10,81 @@ worker_processes  1;
 
 
 events {
-  worker_connections  1024;
+    worker_connections  1024;
 }
 
 
 http {
-  default_type  application/octet-stream;
+    default_type  application/octet-stream;
 
-  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-  '$status $body_bytes_sent "$http_referer" '
-  '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    '$status $body_bytes_sent "$http_referer" '
+    '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format upstreamlog '[$time_local] $remote_addr - $remote_user - '
+    '$server_name  to: $upstream_addr: $request upstream_response_time '
+    '$upstream_response_time msec $msec request_time $request_time';
 
-  access_log /dev/stdout main;
 
-  sendfile        on;
-#tcp_nopush     on;
+    access_log /dev/stdout main;
 
-#keepalive_timeout  0;
-  keepalive_timeout  65;
+    sendfile        on;
+    #tcp_nopush     on;
 
-#gzip  on;
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
 
-  server {
-    listen       $NGINX_PORT;
-    server_name  $NGINX_SERVER_NAME;
+    #gzip  on;
 
-#charset koi8-r;
+    server {
+        listen       $NGINX_PORT;
+        server_name  $NGINX_SERVER_NAME;
 
-#access_log  logs/host.access.log  main;
+        #charset koi8-r;
 
-    location / {
-      root   html;
-      index  index.html index.htm;
+        #access_log  logs/host.access.log  main;
+
+        location = / {
+            add_header X-Debug-Message "location = /" always;
+            root $PWD/html;
+            try_files /index.html =404;
+        }
+
+        location /api/ {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Scheme $scheme;
+            proxy_connect_timeout 10;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_pass http://$API_SERVER_NAME:$API_PORT;
+        }
+
+        location /frontend/sockjs-node/ {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Scheme $scheme;
+            proxy_connect_timeout 10;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_pass http://$FRONTEND_SERVER_NAME:$FRONTEND_PORT/sockjs-node/;
+            access_log /dev/stdout upstreamlog;
+        }
+
+        location /frontend/ {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Scheme $scheme;
+            proxy_connect_timeout 10;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_pass http://$FRONTEND_SERVER_NAME:$FRONTEND_PORT;
+        }
     }
-
-    location /api/ {
-      proxy_pass_header Server;
-      proxy_set_header Host $http_host;
-      proxy_redirect off;
-      proxy_set_header X-Scheme $scheme;
-      proxy_connect_timeout 10;
-      proxy_read_timeout 10;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $remote_addr;
-      proxy_pass http://localhost:$API_PORT;
-    }
-
-    location /frontend/ {
-      proxy_pass http://localhost:$FRONTEND_PORT;
-    }
-  }
 }

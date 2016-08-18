@@ -38,4 +38,4 @@ $(PREFIX)clean:
 
 $(PREFIX)nginx.conf: $(PREFIX)nginx.conf.template
 	cd $(current_dir); \
-	envsubst '$(subst $(space),$(comma),$(addprefix $$,$(ENV_VARIABLES)))' < $(notdir $<) > $(notdir $@)
+	envsubst '$$PWD,$(subst $(space),$(comma),$(addprefix $$,$(ENV_VARIABLES)))' < $(notdir $<) > $(notdir $@)
