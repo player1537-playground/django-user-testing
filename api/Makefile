@@ -37,7 +37,7 @@ $(PREFIX)run: $(PREFIX).depend.secondary
 	./manage.py runserver $(API_PORT)
 
 .PHONY: $(PREFIX)depend
-$(PREFIX)depend: $(PREFIX).depend.seconadry
+$(PREFIX)depend: $(PREFIX).depend.secondary
 
 ################
 # My Targets
@@ -46,20 +46,20 @@ $(PREFIX)depend: $(PREFIX).depend.seconadry
 $(PREFIX)testing:
 	cd $(current_dir) && \
 	source venv/bin/activate && \
-	./manage.py migrate index zero
+	python3 -m pip freeze
 
-.SECONADRY: $(PREFIX).migrate.secondary
-$(PREFIX).migrate.secondary:
-	cd $(current_dir); \
-	source venv/bin/activate; \
-	./manage.py makemigrations; \
-	./manage.py migrate; \
-	touch $(notdir $@)
+.PHONY: $(PREFIX)testing
+$(PREFIX)migrate:
+	cd $(current_dir) && \
+	source venv/bin/activate && \
+	./manage.py makemigrations && \
+	./manage.py migrate
 
 .SECONDARY: $(PREFIX).depend.secondary
 $(PREFIX).depend.secondary: $(PREFIX)requirements.txt
-	cd $(current_dir); \
-	[ ! -e venv ] && python3 -m virtualenv venv; \
-	source venv/bin/activate; \
-	python3 -m pip install -r $(notdir $<); \
+	cd $(current_dir) && \
+	if [ ! -e venv ]; then python3 -m virtualenv venv; fi && \
+	source venv/bin/activate && \
+	python3 -m pip install -r $(notdir $<) && \
+	./manage.py make_my_superuser && \
 	touch $(notdir $@)
