@@ -6,11 +6,15 @@ SHELL := bash
 .SUFFIXES:
 
 ################
-# Functions
+# Helpers
 
 define current_dir
 ./$(dir $@)
 endef
+
+empty :=
+space = $(empty) $(empty)
+comma := ,
 
 ################
 # Environment Variables
@@ -37,6 +41,7 @@ endef
 
 # Somewhat hacky code to load the variables from the current .env file into our
 # makefile so that we can use them
+ENV_VARIABLES :=
 $(eval \
   $(subst @@@,$(newline),\
     $(shell \
@@ -47,6 +52,7 @@ while true; do \
   var=$${line%%=*}; \
   value=$${line#*=}; \
   echo "define $$var@@@$$value@@@endef@@@export $$var@@@"; \
+  echo 'ENV_VARIABLES := $$(ENV_VARIABLES)'"$${var:+$$var }@@@"; \
   done <$(env_file) \
 )))
 
@@ -58,6 +64,9 @@ export PREFIX := api/
 export PREFIX := frontend/
 -include frontend/Makefile
 
+export PREFIX := nginx/
+-include nginx/Makefile
+
 ################
 # Standard Targets
 
@@ -66,10 +75,10 @@ all: run
 
 .PHONY: run
 run:
-	+$(MAKE) -j 2 api/run frontend/run
+	+$(MAKE) -j 3 api/run frontend/run nginx/run
 
 .PHONY: depend
-depend: api/depend frontend/depend
+depend: api/depend frontend/depend nginx/depend
 
 .PHONY: noop
 noop:

@@ -1,4 +1,3 @@
 django>=1.10
 djangorestframework
 django-environ
-django-http-proxy

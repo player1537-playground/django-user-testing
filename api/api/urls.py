@@ -15,12 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from httpproxy.views import HttpProxy
-import views
+from django.conf import settings
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('index.urls')),
-    url(r'^webpack/(?P<url>sockjs-node/.*)$', views.WebpackSockJSView.as_view()),
-    url(r'^webpack/(?P<url>.*)$', views.WebpackMainView.as_view()),
+    url(r'^' + settings.BASE_URL + 'admin/', admin.site.urls),
 ]

@@ -19,6 +19,9 @@ env = environ.Env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = root()
 
+# All URLs will start with this subpath
+BASE_URL = 'api/'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -43,9 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'httpproxy',
     'blog',
-    'index',
     'users',
 ]
 
@@ -127,4 +128,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/' + BASE_URL + 'static/'

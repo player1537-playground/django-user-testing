@@ -46,7 +46,7 @@ $(PREFIX)depend: $(PREFIX).depend.seconadry
 $(PREFIX)testing:
 	cd $(current_dir) && \
 	source venv/bin/activate && \
-	echo $$?
+	./manage.py migrate index zero
 
 .SECONADRY: $(PREFIX).migrate.secondary
 $(PREFIX).migrate.secondary:

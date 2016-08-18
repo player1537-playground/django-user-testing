@@ -17,5 +17,6 @@ export default {
   components: {
     MainPage,
   },
+  ready() { console.log('App ready'); },
 };
 </script>
