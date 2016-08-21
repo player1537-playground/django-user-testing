@@ -37,9 +37,7 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
-    tag = serializers.SlugRelatedField(
-        slug_field='title',
-        queryset=models.Tag.objects.all(),
+    tag = TagSerializer(
     )
 
     resource_uri = fields.ResourceUriField(

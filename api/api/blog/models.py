@@ -32,13 +32,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def truncated_content(self):
-        if len(self.content) > 128:
-            return self.content[:128-3] + '...'
-
-        return self.content
-
 class Tag(models.Model):
     title = models.CharField(
         max_length=256,
