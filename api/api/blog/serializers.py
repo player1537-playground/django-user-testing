@@ -47,8 +47,20 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Post
-        fields = ('resource_uri', 'title', 'content', 'published',
+        fields = ('id', 'resource_uri', 'title', 'content', 'published',
                   'created_date', 'modified_date', 'tag',)
+
+    def create(self, validated_data):
+        print('>>>>>>>>>>>>>')
+        tag_data = validated_data.pop('tag')
+        tag_title = tag_data.pop('title')
+        print('>>>>>>>', tag_data)
+        tag, _ = models.Tag.objects.get_or_create(
+            defaults=tag_data,
+            title__exact=tag_title,
+        )
+        post = models.Post.objects.create(**validated_data, tag=tag)
+        return post
 
 class TagDetailSerializer(TagSerializer):
     posts = PostSerializer(
@@ -61,5 +73,5 @@ class TagDetailSerializer(TagSerializer):
 
 class PostDetailSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
-        fields = ('resource_uri', 'title', 'content', 'published',
+        fields = ('id', 'resource_uri', 'title', 'content', 'published',
                   'created_date', 'modified_date', 'tag',)

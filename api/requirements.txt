@@ -2,3 +2,4 @@ django>=1.10
 djangorestframework
 django-environ
 https://github.com/chibisov/drf-extensions/archive/master.tar.gz
+rest_framework_custom_viewsets

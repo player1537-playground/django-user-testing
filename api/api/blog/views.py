@@ -2,15 +2,20 @@ from . import models
 from . import serializers
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework_extensions import mixins
+from drf_custom_viewsets.viewsets import CustomSerializerViewSet
 
 # Create your views here.
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
+    custom_serializer_classes = {
+        'detail': serializers.PostDetailSerializer,
+    }
 
-class TagViewSet(mixins.DetailSerializerMixin, viewsets.ModelViewSet):
+class TagViewSet(CustomSerializerViewSet, viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    serializer_detail_class = serializers.TagDetailSerializer
+    custom_serializer_classes = {
+        'detail': serializers.TagDetailSerializer,
+    }
