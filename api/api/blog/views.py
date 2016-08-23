@@ -10,12 +10,12 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
     custom_serializer_classes = {
-        'detail': serializers.PostDetailSerializer,
+        'retrieve': serializers.PostDetailSerializer,
     }
 
 class TagViewSet(CustomSerializerViewSet, viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
     custom_serializer_classes = {
-        'detail': serializers.TagDetailSerializer,
+        'retrieve': serializers.TagDetailSerializer,
     }
