@@ -12,7 +12,16 @@ class TagSerializer(serializers.ModelSerializer):
         model = models.Tag
         exclude = ('created_date', 'modified_date',)
 
+    def create(self, validated_data):
+        print('Tag.create', validated_data)
+        return models.Tag.objects.create(**validated_data)
+
 class PostSerializer(serializers.ModelSerializer):
+    resource_uri = fields.ResourceUriField(
+        view_name='post-detail',
+        read_only=True,
+    )
+
     title = serializers.CharField(
         label='Post Title',
         help_text='The title that you want your post to be displayed with',
@@ -37,20 +46,24 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
-    tag = serializers.SlugRelatedField(
-        slug_field='title',
-        queryset=models.Tag.objects.all(),
-    )
-
-    resource_uri = fields.ResourceUriField(
-        view_name='post-detail',
-        read_only=True,
+    tag = serializers.CharField(
+        source='tag.title',
     )
 
     class Meta:
         model = models.Post
-        fields = ('resource_uri', 'title', 'content', 'published',
-                  'created_date', 'modified_date', 'tag',)
+        exclude = ()
+
+    def create(self, validated_data):
+        print('Post.create', validated_data)
+        tag_data = validated_data.pop('tag')
+        tag_title = tag_data.pop('title')
+        tag, _ = models.Tag.objects.get_or_create(
+            title=tag_title,
+            defaults=tag_data,
+        )
+        post = models.Post.objects.create(**validated_data, tag=tag)
+        return post
 
 class TagDetailSerializer(TagSerializer):
     posts = PostSerializer(
@@ -63,5 +76,4 @@ class TagDetailSerializer(TagSerializer):
 
 class PostDetailSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
-        fields = ('resource_uri', 'title', 'content', 'published',
-                  'created_date', 'modified_date', 'tag',)
+        pass

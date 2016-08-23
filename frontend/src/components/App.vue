@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-xs-6 col-xs-offset-3">
-        <main-page></main-page>
+      <div class="col-xs-10 col-xs-offset-2">
+        <router-view></router-view>
       </div>
     </div>
 
@@ -10,13 +10,11 @@
 </template>
 
 <script>
-import MainPage from './MainPage.vue';
+import store from '../vuex/store.js';
 
 export default {
   name: 'App',
-  components: {
-    MainPage,
-  },
+  store,
   ready() { console.log('App ready'); },
 };
 </script>
