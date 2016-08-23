@@ -15,6 +15,11 @@ endif
 ################
 # Local Variables
 
+nginx_command := nginx
+ifeq ($(NGINX_REQUIRE_SUDO),true)
+nginx_command := sudo $(nginx_command)
+endif
+
 ################
 # Standard Targets
 
@@ -24,7 +29,7 @@ $(PREFIX)all: $(PREFIX)run
 .PHONY: $(PREFIX)run
 $(PREFIX)run: $(PREFIX)nginx.conf
 	cd $(current_dir); \
-	nginx -c $(abspath $(PREFIX)nginx.conf) -g 'daemon off;'
+	$(nginx_command) -c $(abspath $(PREFIX)nginx.conf) -g 'daemon off;'
 
 .PHONY: $(PREFIX)depend
 $(PREFIX)depend: $(PREFIX)nginx.conf
