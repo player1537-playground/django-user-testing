@@ -27,13 +27,9 @@ export PYTHONPATH
 $(PREFIX)all: $(PREFIX)run
 
 .PHONY: $(PREFIX)run
-$(PREFIX)run: $(PREFIX).depend.secondary
+$(PREFIX)run: $(PREFIX).depend.secondary $(PREFIX).migrate.secondary
 	cd $(current_dir) && \
 	source venv/bin/activate && \
-	if ./manage.py showmigrations --list | grep ' \[ \]' >/dev/null; then \
-		./manage.py makemigrations && \
-		./manage.py migrate; \
-	fi && \
 	./manage.py runserver $(API_PORT)
 
 .PHONY: $(PREFIX)depend
@@ -46,14 +42,18 @@ $(PREFIX)depend: $(PREFIX).depend.secondary
 $(PREFIX)testing:
 	cd $(current_dir) && \
 	source venv/bin/activate && \
-	python3 -m pip freeze
+	./manage.py makemigrations
 
-.PHONY: $(PREFIX)testing
-$(PREFIX)migrate:
+.PHONY: $(PREFIX)migrate
+$(PREFIX)migrate: $(PREFIX).migrate.secondary
+
+.SECONDARY: $(PREFIX).migrate.secondary
+$(PREFIX).migrate.secondary: $(wildcard $(PREFIX)api/**/models.py) | $(PREFIX)api/db.sqlite3
 	cd $(current_dir) && \
 	source venv/bin/activate && \
 	./manage.py makemigrations && \
 	./manage.py migrate
+	touch $@
 
 .SECONDARY: $(PREFIX).depend.secondary
 $(PREFIX).depend.secondary: $(PREFIX)requirements.txt
