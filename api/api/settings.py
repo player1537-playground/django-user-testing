@@ -112,7 +112,7 @@ USE_L10N = True
 USE_TZ = True
 
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 5,
 }
 
 # Static files (CSS, JavaScript, Images)

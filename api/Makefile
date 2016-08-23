@@ -47,12 +47,21 @@ $(PREFIX)testing:
 .PHONY: $(PREFIX)migrate
 $(PREFIX)migrate: $(PREFIX).migrate.secondary
 
+$(PREFIX)api/db.sqlite3:
+	cd $(current_dir) && \
+	source venv/bin/activate && \
+	./manage.py makemigrations && \
+	./manage.py migrate && \
+	./manage.py make_my_superuser
+	touch $@
+
 .SECONDARY: $(PREFIX).migrate.secondary
 $(PREFIX).migrate.secondary: $(wildcard $(PREFIX)api/**/models.py) | $(PREFIX)api/db.sqlite3
 	cd $(current_dir) && \
 	source venv/bin/activate && \
 	./manage.py makemigrations && \
-	./manage.py migrate
+	./manage.py migrate && \
+	./manage.py make_my_superuser
 	touch $@
 
 .SECONDARY: $(PREFIX).depend.secondary
@@ -61,5 +70,4 @@ $(PREFIX).depend.secondary: $(PREFIX)requirements.txt
 	if [ ! -e venv ]; then python3 -m virtualenv venv; fi && \
 	source venv/bin/activate && \
 	python3 -m pip install -r $(notdir $<) && \
-	./manage.py make_my_superuser && \
 	touch $(notdir $@)

@@ -8,13 +8,13 @@ SHELL := bash
 ################
 # Helpers
 
-define current_dir
-./$(dir $@)
-endef
-
 empty :=
 space = $(empty) $(empty)
 comma := ,
+
+define current_dir
+./$(firstword $(subst /,$(space),$@))
+endef
 
 ################
 # Environment Variables

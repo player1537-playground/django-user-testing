@@ -6,7 +6,8 @@ Vue.use(Vuex);
 const state = {
   blog: {
     posts: {
-      list: [],
+      options: null,
+      list: null,
       detail: null,
     }
   },
@@ -19,6 +20,10 @@ const mutations = {
 
   'SET_BLOG_POSTS_DETAIL' (state, post) {
     state.blog.posts.detail = post;
+  },
+
+  'SET_BLOG_POSTS_OPTIONS' (state, options) {
+    state.blog.posts.options = options;
   },
 };
 
