@@ -46,12 +46,9 @@ class PostSerializer(serializers.ModelSerializer):
                   'modified_date', 'tag',)
 
     def create(self, validated_data):
-        print('>>>>>>>>>>>>>')
-        tag_data = validated_data.pop('tag')
-        tag_title = tag_data.pop('title')
-        print('>>>>>>>', tag_data)
+        print('Post.create', validated_data)
+        tag_title = validated_data.pop('tag')
         tag, _ = models.Tag.objects.get_or_create(
-            defaults=tag_data,
             title__exact=tag_title,
         )
         post = models.Post.objects.create(**validated_data, tag=tag)
