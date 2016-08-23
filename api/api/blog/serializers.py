@@ -3,14 +3,13 @@ from rest_framework_extensions import fields
 from . import models
 
 class TagSerializer(serializers.ModelSerializer):
-    resource_uri = fields.ResourceUriField(
-        view_name='tag-detail',
-        read_only=True,
-    )
-
     class Meta:
         model = models.Tag
         exclude = ('created_date', 'modified_date',)
+
+    def create(self, validated_data):
+        print('Tag.create', validated_data)
+        return models.Tag.objects.create(**validated_data)
 
 class PostSerializer(serializers.ModelSerializer):
     title = serializers.CharField(
@@ -37,18 +36,14 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
-    tag = TagSerializer(
-    )
-
-    resource_uri = fields.ResourceUriField(
-        view_name='post-detail',
-        read_only=True,
+    tag = serializers.PrimaryKeyRelatedField(
+        queryset=models.Tag.objects.all(),
     )
 
     class Meta:
         model = models.Post
-        fields = ('id', 'resource_uri', 'title', 'content', 'published',
-                  'created_date', 'modified_date', 'tag',)
+        fields = ('id', 'title', 'content', 'published', 'created_date',
+                  'modified_date', 'tag',)
 
     def create(self, validated_data):
         print('>>>>>>>>>>>>>')
@@ -73,5 +68,5 @@ class TagDetailSerializer(TagSerializer):
 
 class PostDetailSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
-        fields = ('id', 'resource_uri', 'title', 'content', 'published',
-                  'created_date', 'modified_date', 'tag',)
+        fields = ('id', 'title', 'content', 'published', 'created_date',
+                  'modified_date', 'tag',)

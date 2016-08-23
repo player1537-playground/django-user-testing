@@ -37,6 +37,7 @@ class Tag(models.Model):
         max_length=256,
         blank=True,
         unique=True,
+        primary_key=True,
     )
 
     created_date = models.DateTimeField(
