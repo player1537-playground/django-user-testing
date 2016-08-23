@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework_extensions import fields
+from rest_framework_extensions.utils import compose_parent_pk_kwarg_name
 from . import models
 
 class TagSerializer(serializers.ModelSerializer):
@@ -8,9 +9,16 @@ class TagSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    posts = serializers.HyperlinkedIdentityField(
+        read_only=True,
+        view_name='tag-post-list',
+        lookup_url_kwarg=compose_parent_pk_kwarg_name('tag__title'),
+        lookup_field='title',
+    )
+
     class Meta:
         model = models.Tag
-        exclude = ('created_date', 'modified_date',)
+        exclude = ()
 
     def create(self, validated_data):
         print('Tag.create', validated_data)
@@ -66,11 +74,6 @@ class PostSerializer(serializers.ModelSerializer):
         return post
 
 class TagDetailSerializer(TagSerializer):
-    posts = PostSerializer(
-        many=True,
-        read_only=True,
-    )
-
     class Meta(TagSerializer.Meta):
         exclude = ()
 
