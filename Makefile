@@ -80,8 +80,17 @@ run:
 .PHONY: depend
 depend: api/depend frontend/depend nginx/depend
 
+.PHONY: check
+check: env-check
+
 .PHONY: noop
 noop:
+
+################
+# My Targets
+.PHONY: env-check
+env-check:
+	./scripts/diff_env.bash
 
 ################
 # Debugging
