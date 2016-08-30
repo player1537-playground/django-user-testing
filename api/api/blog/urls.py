@@ -9,7 +9,4 @@ router.register(r'tags', views.TagViewSet, base_name='tag') \
       .register(r'posts', views.PostViewSet, base_name='tag-post',
                 parents_query_lookups=['tag__title'])
 
-for url in router.urls:
-    print(url)
-
 urlpatterns = router.urls

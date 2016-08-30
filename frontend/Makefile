@@ -22,7 +22,7 @@ endif
 $(PREFIX)all: $(PREFIX)run
 
 .PHONY: $(PREFIX)run
-$(PREFIX)run:
+$(PREFIX)run: $(PREFIX).depend.secondary
 	cd $(current_dir); \
 	./node_modules/.bin/webpack-dev-server \
 	--host $(FRONTEND_SERVER_NAME) \

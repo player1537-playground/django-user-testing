@@ -17,6 +17,8 @@ PYTHONPATH := $(PREFIX)
 endif
 export PYTHONPATH
 
+export VIRTUAL_ENV_DISABLE_PROMPT := 1
+
 ################
 # Local Variables
 
