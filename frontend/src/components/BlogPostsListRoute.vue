@@ -16,7 +16,7 @@
         </h3>
       </div>
       <div class="panel-body">
-        <pre>{{ post.content }}</pre>
+        <pre>{{{ marked(post.content) }}}</pre>
 
         <a v-link="{'name': 'blog-posts-detail', params: { id: post.id } }">
           Read more...
@@ -59,6 +59,7 @@
 
 <script>
 import { retrieveBlogPostsList } from '../vuex/actions';
+import marked from 'marked';
 
 export default {
   name: 'BlogPostsListRoute',
@@ -70,6 +71,10 @@ export default {
     actions: {
       retrieveBlogPostsList,
     },
+  },
+
+  methods: {
+    marked,
   },
 
   computed: {

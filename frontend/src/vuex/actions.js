@@ -34,3 +34,21 @@ export function retrieveBlogPostsDetail({ dispatch }, { next, abort }, id) {
     abort(response.statusText);
   });
 }
+
+export function createBlogPost({ dispatch }, { next, abort }, values) {
+  var toPost = {};
+
+  for (var key in values) {
+    if (values[key].config.required) {
+      toPost[key] = values[key].value;
+    }
+  }
+
+  console.log(JSON.stringify(toPost, true, 2));
+
+  resource.blog.posts.save({}, toPost).then((response) => {
+    if (next) next(response.json());
+  }, (response) => {
+    if (abort) abort(response.json());
+  });
+}
