@@ -30,6 +30,11 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    owner = serializers.CharField(
+        read_only=True,
+        source='owner.username',
+    )
+
     title = serializers.CharField(
         label='Post Title',
         help_text='The title that you want your post to be displayed with',
@@ -73,10 +78,13 @@ class PostSerializer(serializers.ModelSerializer):
         post = models.Post.objects.create(**validated_data, tag=tag)
         return post
 
-class TagDetailSerializer(TagSerializer):
-    class Meta(TagSerializer.Meta):
-        exclude = ()
-
-class PostDetailSerializer(PostSerializer):
-    class Meta(PostSerializer.Meta):
-        pass
+    def update(self, instance, validated_data):
+        print('Post.update', instance, validated_data)
+        tag_data = validated_data.pop('tag')
+        tag_title = tag_data.pop('title')
+        tag, _ = models.Tag.objects.get_or_create(
+            title=tag_title,
+            defaults=tag_data,
+        )
+        instance.tag = tag
+        return super().update(instance, validated_data)
