@@ -52,3 +52,7 @@ export function createBlogPost({ dispatch }, { next, abort }, values) {
     if (abort) abort(response.json());
   });
 }
+
+export function setPathAfterLogin({ dispatch }, path) {
+  dispatch('SET_ROUTER_PATH_AFTER_LOGIN', path);
+}

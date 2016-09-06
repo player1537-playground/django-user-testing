@@ -4,6 +4,9 @@ import Vue from 'vue';
 Vue.use(Vuex);
 
 const state = {
+  router: {
+    pathAfterLogin: null,
+  },
   blog: {
     posts: {
       options: null,
@@ -24,6 +27,10 @@ const mutations = {
 
   'SET_BLOG_POSTS_OPTIONS' (state, options) {
     state.blog.posts.options = options;
+  },
+
+  'SET_ROUTER_PATH_AFTER_LOGIN' (state, path) {
+    state.router.pathAfterLogin = path;
   },
 };
 

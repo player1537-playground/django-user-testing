@@ -3,12 +3,17 @@ import Vue from 'vue';
 import BlogPostsListRoute from './components/BlogPostsListRoute.vue';
 import BlogPostsDetailRoute from './components/BlogPostsDetailRoute.vue';
 import BlogPostsCreateRoute from './components/BlogPostsCreateRoute.vue';
+import UserLoginRoute from './components/UserLoginRoute.vue';
+import { isLoggedIn } from './auth';
+import store from './vuex/store';
+import { setPathAfterLogin } from './vuex/actions';
 
 Vue.use(VueRouter);
 
 const router = new VueRouter();
 
 router.map({
+
   '/': {
     name: 'index',
     component: {
@@ -16,18 +21,40 @@ router.map({
       template: `<a v-link="{'name':'blog-posts-list'}">View all blog posts</a>`,
     },
   },
+
   '/blog/posts/list': {
     name: 'blog-posts-list',
     component: BlogPostsListRoute,
   },
+
   '/blog/posts/create': {
     name: 'blog-posts-create',
     component: BlogPostsCreateRoute,
+    auth: true,
   },
+
   '/blog/posts/detail/:id': {
     name: 'blog-posts-detail',
     component: BlogPostsDetailRoute,
   },
+
+  '/user/login': {
+    name: 'user-login',
+    component: UserLoginRoute,
+  },
+
+});
+
+router.beforeEach(function({ to, next, abort }) {
+  if (to.auth) {
+    if (isLoggedIn()) {
+      next();
+    } else {
+      router.go({ name: 'user-login', query: { next: to.path }});
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

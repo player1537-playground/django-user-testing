@@ -17,4 +17,7 @@ export default {
     posts: Vue.resource('/api/blog/posts/{id}{?page}'),
     tags: Vue.resource('/api/blog/tags/{id}'),
   },
+  user: {
+    login: Vue.resource('/api/users/login/'),
+  },
 };
