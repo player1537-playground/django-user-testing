@@ -29,7 +29,7 @@ $(PREFIX)all: $(PREFIX)run
 .PHONY: $(PREFIX)run
 $(PREFIX)run: $(PREFIX)nginx.conf
 	cd $(current_dir); \
-	$(nginx_command) -c $(abspath $(PREFIX)nginx.conf) -g 'daemon off;'
+	$(nginx_command) -c $(abspath $(PREFIX)nginx.conf) -g 'daemon off;' -p $(abspath $(PREFIX))
 
 .PHONY: $(PREFIX)depend
 $(PREFIX)depend: $(PREFIX)nginx.conf

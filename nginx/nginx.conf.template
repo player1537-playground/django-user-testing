@@ -5,9 +5,8 @@ worker_processes  1;
 #error_log  logs/error.log;
 #error_log  logs/error.log  notice;
 #error_log  logs/error.log  info;
-error_log /tmp/logs-error.log;
-
-#pid        logs/nginx.pid;
+error_log logs/logs-error.log;
+pid logs/nginx.pid;
 
 
 events {
