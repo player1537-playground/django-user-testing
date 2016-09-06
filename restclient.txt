@@ -1,0 +1,105 @@
+# -*- restclient -*-
+#
+
+# List users
+GET http://127.0.0.1:8080/api/users/profile/
+
+# Log in
+:username =
+:password =
+
+POST http://127.0.0.1:8080/api/users/login/
+Content-Type: application/json
+
+{
+  "username": ":username",
+  "password": ":password"
+}
+
+################################################################
+# Get posts
+:token =
+
+GET http://127.0.0.1:8080/api/blog/posts/
+
+# Create post without permission (should fail)
+POST http://127.0.0.1:8080/api/blog/posts/
+Content-Type: application/json
+
+{
+  "title": "My Test Post",
+  "content": "My Test Content",
+  "published": false,
+  "tag": "testing"
+}
+
+# Create post with permission
+POST http://127.0.0.1:8080/api/blog/posts/
+Content-Type: application/json
+Authorization: Token :token
+
+{
+  "title": "My Test Post",
+  "content": "My Test Content",
+  "published": false,
+  "tag": "testing"
+}
+
+# Update post without permission (should fail)
+:postid =
+
+PUT http://127.0.0.1:8080/api/blog/posts/:postid/
+Content-Type: application/json
+
+{
+  "title": "My Updated Post"
+}
+
+# Update post with permission
+PUT http://127.0.0.1:8080/api/blog/posts/:postid/
+Content-Type: application/json
+Authorization: Token :token
+
+{
+  "title": "My Updated Post Title",
+  "content": "My Updated Post Content",
+  "published": false,
+  "tag": "testing2"
+}
+
+# Patch post without permission (should fail)
+PATCH http://127.0.0.1:8080/api/blog/posts/:postid/
+Content-Type: application/json
+
+{
+  "title": "My Patched Post Title",
+  "tag": "testing3"
+}
+
+# Patch post with permission
+PATCH http://127.0.0.1:8080/api/blog/posts/:postid/
+Content-Type: application/json
+Authorization: Token :token
+
+{
+  "title": "My Patched Post Title",
+  "tag": "testing3"
+}
+
+################################################################
+# List tags without permission
+GET http://127.0.0.1:8080/api/blog/tags/
+Content-Type: application/json
+
+# Retrieve tag without permission
+GET http://127.0.0.1:8080/api/blog/tags/testing/
+Content-Type: application/json
+
+# Create tag with permission
+POST http://127.0.0.1:8080/api/blog/tags/
+Content-Type: application/json
+Authorization: Token :token
+
+{
+  "title": "foo2"
+}
