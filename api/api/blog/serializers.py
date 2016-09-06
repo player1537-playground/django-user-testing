@@ -5,13 +5,13 @@ from . import models
 
 class TagSerializer(serializers.ModelSerializer):
     resource_uri = fields.ResourceUriField(
-        view_name='tag-detail',
+        view_name='blog:tag-detail',
         read_only=True,
     )
 
     posts = serializers.HyperlinkedIdentityField(
         read_only=True,
-        view_name='tag-post-list',
+        view_name='blog:tag-post-list',
         lookup_url_kwarg=compose_parent_pk_kwarg_name('tag__title'),
         lookup_field='title',
     )
@@ -26,7 +26,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     resource_uri = fields.ResourceUriField(
-        view_name='post-detail',
+        view_name='blog:post-detail',
         read_only=True,
     )
 

@@ -9,3 +9,4 @@ babel_cache
 tmp
 dist
 nginx/nginx.conf
+nginx/logs

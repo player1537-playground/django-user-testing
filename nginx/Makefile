@@ -27,7 +27,7 @@ endif
 $(PREFIX)all: $(PREFIX)run
 
 .PHONY: $(PREFIX)run
-$(PREFIX)run: $(PREFIX)nginx.conf
+$(PREFIX)run: $(PREFIX)nginx.conf | $(PREFIX)logs
 	cd $(current_dir); \
 	$(nginx_command) -c $(abspath $(PREFIX)nginx.conf) -g 'daemon off;' -p $(abspath $(PREFIX))
 
@@ -40,6 +40,9 @@ $(PREFIX)clean:
 
 ################
 # My Targets
+
+$(PREFIX)logs:
+	mkdir -p $@
 
 $(PREFIX)nginx.conf: $(PREFIX)nginx.conf.template
 	cd $(current_dir); \

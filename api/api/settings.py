@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'blog',
     'users',
 ]
@@ -113,6 +114,9 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 }
 
 # Static files (CSS, JavaScript, Images)
