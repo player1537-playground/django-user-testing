@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import { login } from '../auth';
-import { setPathAfterLogin } from '../vuex/actions';
+import { authToken } from '../vuex/getters';
+import { authLogin } from '../vuex/actions';
 
 export default {
   name: 'UserLoginRoute',
@@ -34,10 +34,10 @@ export default {
 
   vuex: {
     getters: {
-      pathAfterLogin(state) { return state.router.pathAfterLogin; },
+      authToken,
     },
     actions: {
-      setPathAfterLogin,
+      authLogin,
     },
   },
 
@@ -45,9 +45,9 @@ export default {
     submit() {
       console.log('UserLoginRoute.submit');
 
-      login({
+      this.authLogin({
         next: (data) => {
-          this.$router.go(this.$route.query.next);
+          this.$router.go(this.$route.query.next || {'name': 'index'});
         },
         abort: (data) => {
           this.error = data;

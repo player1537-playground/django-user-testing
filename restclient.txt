@@ -16,9 +16,38 @@ Content-Type: application/json
   "password": ":password"
 }
 
+# Check auth (without authentication)
+:token =
+
+POST http://127.0.0.1:8080/api/users/authCheck/
+Content-Type: application/json
+
+# Check auth (with null token)
+POST http://127.0.0.1:8080/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": null
+}
+
+# Check auth (with invalid token)
+POST http://127.0.0.1:8080/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": "foobar"
+}
+
+# Check auth (with valid token)
+POST http://127.0.0.1:8080/api/users/authCheck/
+Content-Type: application/json
+
+{
+  "token": ":token"
+}
+
 ################################################################
 # Get posts
-:token =
 
 GET http://127.0.0.1:8080/api/blog/posts/
 

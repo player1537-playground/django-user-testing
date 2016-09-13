@@ -4,6 +4,7 @@ import BlogPostsListRoute from './components/BlogPostsListRoute.vue';
 import BlogPostsDetailRoute from './components/BlogPostsDetailRoute.vue';
 import BlogPostsCreateRoute from './components/BlogPostsCreateRoute.vue';
 import UserLoginRoute from './components/UserLoginRoute.vue';
+import UserLogoutRoute from './components/UserLogoutRoute.vue';
 import { isLoggedIn } from './auth';
 import store from './vuex/store';
 import { setPathAfterLogin } from './vuex/actions';
@@ -41,6 +42,11 @@ router.map({
   '/user/login': {
     name: 'user-login',
     component: UserLoginRoute,
+  },
+
+  '/user/logout': {
+    name: 'user-logout',
+    component: UserLogoutRoute,
   },
 
 });

@@ -1,11 +1,12 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import {authCheck} from './actions';
 
 Vue.use(Vuex);
 
 const state = {
-  router: {
-    pathAfterLogin: null,
+  auth: {
+    token: window.localStorage.getItem('token'),
   },
   blog: {
     posts: {
@@ -17,6 +18,18 @@ const state = {
 };
 
 const mutations = {
+  'SET_AUTH_TOKEN' (state, token) {
+    state.auth.token = token;
+
+    if (token === null) {
+      window.localStorage.removeItem('token');
+      delete Vue.http.options.headers['Authorization'];
+    } else {
+      window.localStorage.setItem('token', token);
+      Vue.http.options.headers['Authorization'] = 'Token ' + token;
+    }
+  },
+
   'SET_BLOG_POSTS_LIST' (state, posts) {
     state.blog.posts.list = posts;
   },
@@ -28,13 +41,13 @@ const mutations = {
   'SET_BLOG_POSTS_OPTIONS' (state, options) {
     state.blog.posts.options = options;
   },
-
-  'SET_ROUTER_PATH_AFTER_LOGIN' (state, path) {
-    state.router.pathAfterLogin = path;
-  },
 };
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state,
   mutations,
 });
+
+authCheck(store);
+
+export default store;

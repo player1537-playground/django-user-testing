@@ -21,3 +21,10 @@ class UserLoginViewSet(viewsets.ViewSet):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
+
+class UserAuthCheckViewSet(viewsets.ViewSet):
+    def create(self, request, format=None):
+        serializer = serializers.UserAuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        return Response({'username': getattr(user, 'username', None)})

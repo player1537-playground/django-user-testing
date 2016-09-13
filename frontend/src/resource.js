@@ -19,5 +19,6 @@ export default {
   },
   user: {
     login: Vue.resource('/api/users/login/'),
+    authCheck: Vue.resource('/api/users/authCheck/'),
   },
 };
