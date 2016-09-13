@@ -5,9 +5,8 @@ import BlogPostsDetailRoute from './components/BlogPostsDetailRoute.vue';
 import BlogPostsCreateRoute from './components/BlogPostsCreateRoute.vue';
 import UserLoginRoute from './components/UserLoginRoute.vue';
 import UserLogoutRoute from './components/UserLogoutRoute.vue';
-import { isLoggedIn } from './auth';
 import store from './vuex/store';
-import { setPathAfterLogin } from './vuex/actions';
+import { loggedIn } from './vuex/getters';
 
 Vue.use(VueRouter);
 
@@ -53,7 +52,7 @@ router.map({
 
 router.beforeEach(function({ to, next, abort }) {
   if (to.auth) {
-    if (isLoggedIn()) {
+    if (loggedIn(store.state)) {
       next();
     } else {
       router.go({ name: 'user-login', query: { next: to.path }});

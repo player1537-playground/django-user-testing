@@ -28,14 +28,13 @@
           <router-view></router-view>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import store from '../vuex/store';
-import { authToken } from '../vuex/getters';
+import { loggedIn } from '../vuex/getters';
 
 export default {
   name: 'App',
@@ -43,13 +42,7 @@ export default {
 
   vuex: {
     getters: {
-      authToken,
-    },
-  },
-
-  computed: {
-    loggedIn() {
-      return this.authToken !== null;
+      loggedIn,
     },
   },
 
