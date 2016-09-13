@@ -35,6 +35,9 @@ class Post(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        ordering = ['-created_date']
+
     def __str__(self):
         return self.title
 

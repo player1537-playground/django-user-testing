@@ -28,13 +28,21 @@ export function retrieveBlogPostsDetail({ dispatch }, { next, abort }, id) {
   dispatch('SET_BLOG_POSTS_DETAIL', null);
   dispatch('SET_BLOG_POSTS_LIST', null);
 
-  resource.blog.posts.get({id}).then((response) => {
-    dispatch('SET_BLOG_POSTS_DETAIL', response.json());
-    if (next) next();
-  }, (response) => {
-    abort(response.statusText);
-  });
-}
+  resource.blog.posts.get({id})
+    .then((response) => {
+      console.log('retrieveBlogPostsDetail.then', response);
+
+      dispatch('SET_BLOG_POSTS_DETAIL', response.json());
+
+      if (next) next();
+    }).catch((response) => {
+      console.log('retrieveBlogPostsDetail.catch', response);
+
+
+      abort(response.statusText);
+    });
+};
+
 
 export function createBlogPost({ dispatch }, { next, abort }, values) {
   var toPost = {};

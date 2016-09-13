@@ -4,15 +4,14 @@
       <span>{{ post ? post.title : 'Loading...' }}</span>
     </div>
     <div class="panel-body">
-      <p v-for="par in paragraphs">
-        {{ par }}
-      </p>
+      {{{ marked(post.content) }}}
     </div>
   </div>
 </template>
 
 <script>
 import { retrieveBlogPostsDetail } from '../vuex/actions';
+import marked from 'marked';
 
 export default {
   name: 'BlogPostsDetailRoute',
@@ -26,10 +25,8 @@ export default {
     },
   },
 
-  computed: {
-    paragraphs() {
-      return this.post ? this.post.content.split('\n') : [];
-    },
+  methods: {
+    marked,
   },
 
   route: {

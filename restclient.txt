@@ -51,6 +51,10 @@ Content-Type: application/json
 
 GET http://127.0.0.1:8080/api/blog/posts/
 
+# Get post by id
+
+GET http://127.0.0.1:8080/api/blog/posts/1/
+
 # Create post without permission (should fail)
 POST http://127.0.0.1:8080/api/blog/posts/
 Content-Type: application/json
