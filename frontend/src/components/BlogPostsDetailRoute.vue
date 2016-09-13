@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div v-if="post" class="panel panel-default">
     <div class="panel-heading">
       <span>{{ post ? post.title : 'Loading...' }}</span>
     </div>

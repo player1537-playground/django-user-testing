@@ -19,7 +19,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    # url(r'^' + settings.BASE_URL + 'blog/', include(router.urls)),
     url(r'^' + settings.BASE_URL + 'blog/', include('blog.urls', namespace='blog')),
     url(r'^' + settings.BASE_URL + 'users/', include('users.urls', namespace='users')),
     url(r'^' + settings.BASE_URL + 'admin/', admin.site.urls),
